@@ -1,0 +1,54 @@
+name: Validate JSDoc and publish to registries
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/publish.yml"
+      - 'deno.json'
+      - 'sh/publish.sh'
+      - 'src/data/**'
+      - 'src/*/index.d.mts'
+  workflow_dispatch:
+
+concurrency:
+  group: "publish"
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: ${{github.server_url == 'https://github.com' && github.repository == 'ltgcgo/octavia'}}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: latest
+
+      - name: Generate data for Octavia
+        run: "./shx generate"
+      - name: Build Octavia files
+        run: "./shx build"
+      - name: Apply dependency graph
+        run: "./shx depGraph"
+      - name: Publish package
+        run: "./shx publish"
+      - name: Upload generated files
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-bundle
+          path: |
+            README.md
+            dist/README.md
+            dist/*.mjs
+            dist/*.d.mts
+            dist/**/.d.mts
+            libs/libs
+            libs/**/*.d.mts
