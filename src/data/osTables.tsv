@@ -1,0 +1,12 @@
+to	from
+aix	aix
+android	android
+cygwin	cygwin,mingw,mingw-w64,msys,msys2
+darwin	darwin,ios,macos
+freebsd	freebsd
+haiku	haiku,beos,openbeos
+linux	linux
+netbsd	netbsd
+openbsd	openbsd
+solaris	solaris,sunos
+windows	windows,win32,win64
