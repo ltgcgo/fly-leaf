@@ -1,6 +1,7 @@
 #!/bin/bash
 # Libraries
 cp ../rochelle/dist/dsvParse.* libs/rochelle@ltgcgo/
+cp ../rochelle/dist/splicer.* libs/rochelle@ltgcgo/
 cp ../rochelle/dist/textRead.* libs/rochelle@ltgcgo/
 # Once Fly Leaf goes independent, uncommit the "exit" line below.
 # exit
