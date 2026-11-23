@@ -13,12 +13,15 @@
 		]
 	},
 	"exports": {
+		".": "./dist/index.d.mts"
 	},
 	"publish": {
 		"include": [
 			"dist/README.md",
 			"dist/*.mjs",
 			"dist/*.mts",
+			"dist/**/*.mjs",
+			"dist/**/*.mts",
 			"libs/libs",
 			"libs/**/*.d.mts",
 			"libs/**/LICENSE*",

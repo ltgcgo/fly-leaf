@@ -58,7 +58,7 @@ if [ -d "./src" ]; then
 			sed -zEi 's#from "\.\./([^/]+)/index\.d\.ts"#from "./\1.d.ts"#g' "dist/${dir}.d.ts"
 			sed -zEi 's#from "\.\.\/\.\.\/libs\/#from "../libs/#g' "dist/${dir}.d.ts"
 			if [ -d "src/${dir}/${dir}" ] ; then
-				cp -r "src/${dir}/${dir}" "dist/${dir}"
+				cp -r "src/${dir}/${dir}" "dist"
 			fi
 		fi
 		if [ -f "src/${dir}/index.mjs" ] ; then
@@ -72,7 +72,7 @@ if [ -d "./src" ]; then
 			sed -zEi 's#from "\.\./([^/]+)/index\.d\.mts"#from "./\1.d.mts"#g' "dist/${dir}.d.mts"
 			sed -zEi 's#from "\.\.\/\.\.\/libs\/#from "../libs/#g' "dist/${dir}.d.mts"
 			if [ -d "src/${dir}/${dir}" ] ; then
-				cp -r "src/${dir}/${dir}" "dist/${dir}"
+				cp -r "src/${dir}/${dir}" "dist"
 			fi
 		fi
 	done
