@@ -22,7 +22,9 @@ export class LeafStandardSink {
 	/** @param {NodeJS.WriteStream & {fd: number}} resourceDescriptor */
 	constructor(resourceDescriptor) {
 		this.#rd = resourceDescriptor;
-		this.writable = NodeStream.Writable.toWeb(resourceDescriptor);
+		if (NodeStream.Writable?.toWeb) {
+			this.writable = NodeStream.Writable.toWeb(resourceDescriptor);
+		};
 	};
 	close() {
 		if (this.#closed) return;
@@ -40,9 +42,9 @@ export class LeafStandardSink {
 	write(byob) {
 		if (this.#closed) return; // Deviation?
 		const upThis = this;
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			NodeFs.write(upThis.#rd.fd, byob, (err, ioSize) => {
-				if (err) throw(err);
+				if (err) reject(err);
 				resolve(ioSize);
 			});
 		});
@@ -115,12 +117,12 @@ export class LeafStandardTeleTypeInput {
 			upThis.#as.aborted ||
 			upThis.#rd.readableEnded
 		) return null; // Deviation?
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			upThis.#as.onabort = () => {
 				resolve(null);
 			};
 			NodeFs.read(upThis.#rd.fd, byob, (err, ioSize) => {
-				if (err) throw(err);
+				if (err) reject(err);
 				resolve(ioSize);
 			});
 		});
