@@ -22,6 +22,8 @@ if (self.Ende) {
 } else if (self.Ant) {
 	selectedBackend = "Ant";
 	flyLeafGlobals = await import("../rt.ant/index.mjs");
+} else if (self.tjs) {
+	selectedBackend = "Txiki";
 } else if (self.Bun) {
 	selectedBackend = "Bun";
 	flyLeafGlobals = await import("../rt.bun/index.mjs");
@@ -40,6 +42,12 @@ if (self.Ende) {
 	};
 };
 debugMsg && console.debug(`Selected backend: ${selectedBackend ?? "(none)"}.`);
+if (flyLeafGlobals == null) {
+	if (selectedBackend != null) {
+		console.error(`The current runtime may only allow async-only APIs.`);
+	};
+	throw(new TypeError(`No valid backend for runtime "${selectedBackend ?? "Unknown"}".`));
+};
 
 flyLeafGlobals.version.asyncOnly = false;
 
@@ -47,11 +55,15 @@ const {
 	_leaf_overlay_,
 
 	// Classes and enums
+	ChildProcess,
+	Command,
 	FsFile,
 	PermissionStatus,
 	Permissions,
 	SeekMode,
 
+	LeafChildProcess,
+	LeafCommand,
 	LeafFsFile,
 	LeafPermissions,
 	LeafPermStatus,
@@ -144,6 +156,7 @@ const {
 
 	// Child process
 	kill,
+	spawn,
 	spawnAndWait,
 	spawnAndWaitSync
 } = flyLeafGlobals;
@@ -153,11 +166,15 @@ export {
 	_leaf_yield_,
 	_leaf_apply_,
 
+	ChildProcess,
+	Command,
 	FsFile,
 	PermissionStatus,
 	Permissions,
 	SeekMode,
 
+	LeafChildProcess,
+	LeafCommand,
 	LeafFsFile,
 	LeafPermissions,
 	LeafPermStatus,
@@ -245,6 +262,7 @@ export {
 	writeTextFileSync,
 
 	kill,
+	spawn,
 	spawnAndWait,
 	spawnAndWaitSync
 };
@@ -255,4 +273,4 @@ if (Symbol.toStringTag) {
 	defaultGlobals[Symbol.toStringTag] = "Leaf";
 };
 export default defaultGlobals;
-export { defaultGlobals as Deno };
+//export { defaultGlobals as Deno };

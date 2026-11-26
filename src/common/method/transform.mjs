@@ -4,6 +4,8 @@
 
 "use strict";
 
+import CommonStreamConverters from "../util/consumer.mjs";
+
 /** @returns {Uint8Array} */
 export function toUint8Array(buffer) {
 	if (
@@ -18,19 +20,19 @@ export function toUint8Array(buffer) {
 };
 
 /** @param {ReadableStream<Uint8Array>} readable
-* @returns {import("../../index/index/conventions.d.mts").ExtendedReadableByteStream} */
+* @returns {import("../../leaf.full/leaf.full/conventions.d.mts").ExtendedReadableByteStream} */
 export function toExtendedReadable(readable) {
 	readable.arrayBuffer = () => {
-		return (new Response(readable)).arrayBuffer();
+		return CommonStreamConverters.arrayBuffer(readable);
 	};
 	readable.bytes = () => {
-		return (new Response(readable)).bytes();
+		return CommonStreamConverters.bytes(readable);
 	};
 	readable.json = () => {
-		return (new Response(readable)).json();
+		return CommonStreamConverters.json(readable);
 	};
 	readable.text = () => {
-		return (new Response(readable)).text();
+		return CommonStreamConverters.text(readable);
 	};
 	return readable;
 };

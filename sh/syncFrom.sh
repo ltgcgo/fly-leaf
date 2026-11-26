@@ -10,8 +10,11 @@ rm LICENSE
 rm README.md
 rm -r src/common
 rm -r src/dummy
-rm -r src/index
+rm -r src/leaf.*
 rm -r src/loader
+rm -r src/loadAsync
+rm -r src/preload
+rm -r src/ra.*
 rm -r src/rt.*
 rm -r src/vergilius
 # Copy from Octavia
@@ -19,8 +22,11 @@ cp -P ../octavia/src/flyLeaf/LICENSE ./
 cp -P ../octavia/src/flyLeaf/README.md ./
 cp -rP ../octavia/src/flyLeaf/common src/
 cp -rP ../octavia/src/flyLeaf/dummy src/
-cp -rP ../octavia/src/flyLeaf/index src/
+cp -rP ../octavia/src/flyLeaf/leaf.* src/
 cp -rP ../octavia/src/flyLeaf/loader src/
+cp -rP ../octavia/src/flyLeaf/loadAsync src/
+cp -rP ../octavia/src/flyLeaf/preload src/
+cp -rP ../octavia/src/flyLeaf/ra.* src/
 cp -rP ../octavia/src/flyLeaf/rt.* src/
 cp -rP ../octavia/src/flyLeaf/vergilius src/
 exit

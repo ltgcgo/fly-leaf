@@ -171,16 +171,10 @@ export class LeafPermissions {
 	*
 	* Do note that `request` will not emit prompts on already granted permissions, so there's no need to chain queries before requests. */
 	query(details: LeafPermDetails): Promise<LeafPermStatus>;
-	/** The synchronous variant of `query`. */
-	querySync(details: LeafPermDetails): LeafPermStatus;
 	/** If the permission hasn't been granted, prompt to request then resolves to the result. */
 	request(details: LeafPermDetails): Promise<LeafPermStatus>;
-	/** The synchronous variant of `request`. */
-	requestSync(details: LeafPermDetails): LeafPermStatus;
 	/** Revoke a permission. */
 	revoke(details: LeafPermDetails): Promise<LeafPermStatus>;
-	/** The synchronous variant of `revoke`. */
-	revokeSync(details: LeafPermDetails): LeafPermStatus;
 }
 export type Permissions = LeafPermissions;
 

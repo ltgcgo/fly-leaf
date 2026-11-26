@@ -2,17 +2,17 @@
 // 2026-2026 © Lightingale Community
 // Licensed under GNU LGPL v3.0+ license.
 
-import {
+import type {
 	DisposableObject,
 	ExtendedReadableByteStream,
 	Throws,
 	WrappedAbortSignal
-} from "./conventions.d.mts";
-import { LeafSystemSignal } from "./env.d.mts";
-import {
+} from "../../leaf.async/leaf.async/conventions.d.mts";
+import type { LeafSystemSignal } from "../../leaf.async/leaf.async/env.d.mts";
+import type {
 	LeafLegacyWrappedReader,
 	LeafLegacyWrappedWriter
-} from "./io.d.mts";
+} from "../../leaf.async/leaf.async/io.d.mts";
 
 /** How the runtime should handle standard I/O piping. Documentation only exists in [Node.js](https://nodejs.org/api/child_process.html#optionsstdio) and [the deprecated Deno APIs](https://web.archive.org/web/20220607210142/https://doc.deno.land/deno/stable/~/Deno.run), despite its behaviour still [being essential](https://docs.deno.com/api/deno/subprocess/#Deno.CommandOptions).
 * - `inherit`: Pass the standard IOs of the parent running instance through to the child. Causes accesses to the related standard IO fields to throw type errors.
@@ -183,15 +183,11 @@ export type ChildProcess = typeof LeafChildProcess<{
 }>;
 
 /** Declaration of a reusable command. */
-declare class LeafCommand<T extends LeafCommandOptions> {
+export class LeafCommand<T extends LeafCommandOptions> {
 	/** Run the declared command, then collect its output upon finishing.
 	*
 	* Standard input cannot be set to piped mode, or this method will throw immediately. */
 	output(): T["stdin"] extends "piped" ? Throws<TypeError, never> : Promise<LeafCommandOutput<"output", T>>;
-	/** The synchronous variant of `output`.
-	*
-	* Standard input cannot be set to piped mode, or this method will throw immediately. */
-	outputSync(): T["stdin"] extends "piped" ? Throws<TypeError, never> : LeafCommandOutput<"output", T>;
 	/** Run the declared command. */
 	spawn(): LeafChildProcess<T>;
 	constructor(command: string|URL, options?: T);
@@ -215,7 +211,3 @@ export function spawn<T extends LeafCommandOptions>(command: string|URL, args: s
 export function spawnAndWait<T extends LeafCommandOptions>(command: string|URL, options?: T): Promise<LeafCommandOutput<"output", T>>;
 /** Run a command directly as a child process, then collect its output upon finishing. Unstable for Deno. */
 export function spawnAndWait<T extends LeafCommandOptions>(command: string|URL, args: string[], options?: Omit<T, "args">): Promise<LeafCommandOutput<"output", T>>;
-/** The synchronous variant of `spawnAndWait`. */
-export function spawnAndWaitSync<T extends LeafCommandOptions>(command: string|URL, options?: T): LeafCommandOutput<"output", T>;
-/** The synchronous variant of `spawnAndWait`. */
-export function spawnAndWaitSync<T extends LeafCommandOptions>(command: string|URL, args: string[], options?: Omit<T, "args">): LeafCommandOutput<"output", T>;

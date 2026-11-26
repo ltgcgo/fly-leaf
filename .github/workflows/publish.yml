@@ -32,9 +32,9 @@ jobs:
         with:
           deno-version: latest
 
-      - name: Generate data for Octavia
+      - name: Generate project data
         run: "./shx generate"
-      - name: Build Octavia files
+      - name: Build project files
         run: "./shx build"
       - name: Apply dependency graph
         run: "./shx depGraph"

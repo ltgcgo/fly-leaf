@@ -34,9 +34,17 @@ The Fly Leaf loader can be used if a component expects Deno globals. If provided
 - Ant: `ant --preload ./libs/fly-leaf@ltgcgo/loader.mjs ...`
 - Bun: `bun run --preload ./libs/fly-leaf@ltgcgo/loader.mjs ...`
 
+Async-only variants are available as well.
+
+- Node.js: `node --import ./libs/fly-leaf@ltgcgo/loadAsync.mjs ...`
+- Deno: `deno run --preload ./libs/fly-leaf@ltgcgo/loadAsync.mjs ...`
+- Ende: `ende run --preload ./libs/fly-leaf@ltgcgo/loadAsync.mjs ...`
+- Ant: `ant --preload ./libs/fly-leaf@ltgcgo/loadAsync.mjs ...`
+- Bun: `bun run --preload ./libs/fly-leaf@ltgcgo/loadAsync.mjs ...`
+
 All supported runtimes set `Deno.version.backend` and `Deno.version.engine`. For a list of valid values, see the [runtimes](#runtimes) section below.
 
-Runtimes may not actually execute the loader in the context of REPL, so debug with caution.
+Runtimes may not actually execute the loader in the context of REPL, so debug with caution. Both Porffor and Txiki do not support preloading.
 
 ### Force import
 To make sure _Fly Leaf_ remains available regardless of runtime, you can import _Fly Leaf_ as a whole in your project, or import the required APIs granularly. Apart from vendoring, you can import via direct HTTP(S) imports, import maps, or JSR, whichever is available and convenient.
@@ -45,18 +53,21 @@ If Fly Leaf is going to be included in a pre-compiled bundle intended for a sing
 
 ```js
 // Default import. (recommended)
-import Leaf from "./libs/fly-leaf@ltgcgo/index.mjs";
+import Leaf from "./libs/fly-leaf@ltgcgo/leaf.full.mjs";
 // Or glob import.
-import * as Leaf from "./libs/fly-leaf@ltgcgo/index.mjs";
+import * as Leaf from "./libs/fly-leaf@ltgcgo/leaf.full.mjs";
+// Default import is also available for async-only variants.
+import Leaf from "./libs/fly-leaf@ltgcgo/leaf.async.mjs";
+// As well as glob import.
+import * as Leaf from "./libs/fly-leaf@ltgcgo/leaf.async.mjs";
 ```
 
 ## Support
-#### Variants
+### Variants
 Fly Leaf offers two separate variants of the same Deno API. Unless absolutely needed, it's generally recommended to use the async-only variant.
 
 - [ ] Async-only: When both the synchronous and the asynchronous versions of the same API exist, subject to runtime feature availability, this Fly Leaf variant implements only the asynchronous subset of the full variant. This allows Fly Leaf to support more runtimes and use more runtime-native features.
-  - [ ] Ant: `Ant.serve` for HTTP servers.
-  - [ ] Bun: `BunFile` for files, `Bun.serve` for HTTP servers, and `Bun.spawn` for processes.
+  - [ ] Bun: `BunFile` for files, and `Bun.spawn` for processes.
 - [x] Full: This version offers the entire collection of in-scope Deno APIs, subject to runtime feature availability.
 
 ### Runtimes
@@ -69,6 +80,7 @@ Fly Leaf offers two separate variants of the same Deno API. Unless absolutely ne
 | ✓ | ✓ | Ende | `Ende` | `V8` | 20261014+ | N/A |
 | ✓ | ✓ | Node.js | `Node` | `V8` | 22.18+, 24.2+ | 22.21+, 24.0+ |
 | ✓ | ✓ | Porffor | `Porffor` | `Porffor` | alpha 20+ | ? |
+| × | ✓ | Txiki.js | `Txiki` | `QuickJS` | ? | ? |
 
 - IMM: `import.meta.main`
 - UEP: `NODE_USE_ENV_PROXY`
@@ -86,9 +98,9 @@ Fly Leaf offers two separate variants of the same Deno API. Unless absolutely ne
 - Generic WinterTC: Async-only. Blocked by various fundamentally missing APIs, subject to runtime feature availability.
 - [Kiesel](https://kiesel.dev/): Investigating.
 - [**Node.js**](https://nodejs.org): WIP.
-- [**Porffor**](https://porffor.dev/): Blocked by incomplete APIs.
-  - Porffor does not support test running. Use other supported runtimes instead.
-- [Txiki.js](https://txikijs.org/): WIP. Linux builds [available here](https://github.com/ltgcgo/build-service-bin/releases/tag/build-txiki), currently without FFI support.
+- [**Porffor**](https://porffor.dev/): WIP.
+  - Not recommended for validation. If tests and benchmarks are not supported, Fly Leaf will use its own universal fallback.
+- [**Txiki.js**](https://txikijs.org/): Async-only, WIP. Linux builds [available here](https://github.com/ltgcgo/build-service-bin/releases/tag/build-txiki), currently without FFI support.
 - [~~a-Shell `JSC`~~](https://github.com/holzschu/a-shell/blob/master/man/man1/jsc.1): Out of scope. Basic FS access, insufficient platform APIs.
 - [~~Javy~~](https://github.com/bytecodealliance/javy): Out of scope. Insufficient platform APIs.
 - [~~Steve's Den~~](https://github.com/stevefan1999-personal/den): Out of scope. Insufficient documentation, and the `den:*` import scheme is the exact thing Fly Leaf avoids, despite being older than _Ende_.
@@ -96,7 +108,11 @@ Fly Leaf offers two separate variants of the same Deno API. Unless absolutely ne
 > As a side effect of offering Deno APIs on runtimes without them, _Fly Leaf_ also tests whether a runtime upholds JS features and their own advertised feature sets.
 
 ### Additional features
-#### Deno
+#### Common baseline
+- Testing and benchmarking: Whenever an environment lacks native validator and benchmark runners, Fly Leaf will supply its own fallback version. Setting `LEAF_COMMON_VALIDATOR` to `1` forces such fallbacks regardless of runtime availability.
+- Tracing: For certain operations and APIs, Fly Leaf (or Vergilius) offers traces printed in the standard output. Setting `VERGILIUS_PRINT_TRACE` to `0` or leaving it unset to disable it, or to `1` (`light`), `2` (`medium`), `3` (`deep`) and `4` (`insane`) to enable various levels of verbosity.
+
+#### Deno deprecated
 These are the features deprecated by the Deno runtime. Fly Leaf re-implements all of the ones listed below, with the remaining deprecated APIs completely absent.
 - [`Deno.run()`](https://web.archive.org/web/20220629065958/https://doc.deno.land/deno/stable/~/Deno.RunOptions)
 
