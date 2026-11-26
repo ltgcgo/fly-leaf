@@ -6,10 +6,10 @@
 
 import {
 	DisposableObject
-} from "../../leaf.async/leaf.async/conventions.d.mts";
+} from "../leaf.async/conventions.d.mts";
 import {
 	LeafSeekMode
-} from "../../leaf.async/leaf.async/io.d.mts";
+} from "../leaf.async/io.d.mts";
 import {
 	LeafFsFileAsync,
 	LeafDirEntry,
@@ -21,7 +21,7 @@ import {
 	LeafRemoveOptions,
 	LeafSymlinkOptions,
 	LeafWriteFileOptions
-} from "../../leaf.async/leaf.async/fs.d.mts";
+} from "../leaf.async/fs.d.mts";
 
 export class LeafFsFileFull extends LeafFsFileAsync implements DisposableObject, Disposable {
 	/**  */

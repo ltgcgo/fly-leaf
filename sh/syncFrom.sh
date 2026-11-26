@@ -6,6 +6,7 @@ cp ../rochelle/dist/textRead.* libs/rochelle@ltgcgo/
 # Once Fly Leaf goes independent, uncommit the "exit" line below.
 # exit
 # Clean the old tree up
+rm deno.json
 rm LICENSE
 rm README.md
 rm -r src/common
@@ -18,6 +19,7 @@ rm -r src/ra.*
 rm -r src/rt.*
 rm -r src/vergilius
 # Copy from Octavia
+cp -P ../octavia/isolated/fly-leaf/deno.json ./
 cp -P ../octavia/src/flyLeaf/LICENSE ./
 cp -P ../octavia/src/flyLeaf/README.md ./
 cp -rP ../octavia/src/flyLeaf/common src/

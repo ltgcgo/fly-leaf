@@ -53,6 +53,7 @@ if [ -d "./src" ]; then
 			#sed -zi "$substRules" "dist/${dir}.js"
 		fi
 		if [ -f "src/${dir}/index.d.ts" ] ; then
+			echo "Copying TS target declarations for \"${dir}\"..."
 			cp "src/${dir}/index.d.ts" "dist/${dir}.d.ts"
 			sed -zEi 's#from "\.\./([^/]+)/index\.js"#from "./\1.js"#g' "dist/${dir}.d.ts"
 			sed -zEi 's#from "\.\./([^/]+)/index\.d\.ts"#from "./\1.d.ts"#g' "dist/${dir}.d.ts"
@@ -67,6 +68,7 @@ if [ -d "./src" ]; then
 			#sed -zi "$substRules" "dist/${dir}.mjs"
 		fi
 		if [ -f "src/${dir}/index.d.mts" ] ; then
+			echo "Copying TS module declarations for \"${dir}\"..."
 			cp "src/${dir}/index.d.mts" "dist/${dir}.d.mts"
 			sed -zEi 's#from "\.\./([^/]+)/index\.mjs"#from "./\1.mjs"#g' "dist/${dir}.d.mts"
 			sed -zEi 's#from "\.\./([^/]+)/index\.d\.mts"#from "./\1.d.mts"#g' "dist/${dir}.d.mts"
